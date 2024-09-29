@@ -150,4 +150,18 @@ export default class CalendarHelper {
 			return holidayDate.getMonth() == month;
 		});
 	}
+	static getHolidaysForDay(date, holidays) {
+		return holidays.filter((holiday) => {
+			const holidayDate = new Date(holiday.date);
+			date.setMonth(date.getMonth() % 12);
+			holidayDate.setHours(0);
+			date.setHours(0);
+			if (holiday.mode == 'yearly') {
+				holidayDate.setFullYear(2000);
+				date.setFullYear(2000);
+			}
+
+			return holidayDate.getTime() == date.getTime();
+		});
+	}
 }

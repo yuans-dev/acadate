@@ -3,9 +3,22 @@
 	import CurrentCalendar from '../lib/CurrentCalendar.svelte';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import InfoBar from '../lib/InfoBar.svelte';
+	import { activeCalendars } from '../lib/store';
 
 	export let data;
-	let calendars = data.post.calendars.filter((calendar) => calendar.title == 'Mapua University');
+	let calendars = data.post.calendars;
+	calendars.forEach((calendar) => {
+		calendar.shown = false;
+	});
+
+	calendars = combineArrays(calendars, $activeCalendars);
+	function combineArrays(arrayA, arrayB) {
+		return arrayA.map((itemA) => {
+			let match = arrayB.find((itemB) => itemB.title === itemA.title);
+			return match ? { ...itemA, shown: match.shown } : itemA;
+		});
+	}
+
 	let holidays = data.post.holidays;
 
 	let previousMonth, nextMonth, currentMonth;
@@ -29,7 +42,7 @@
 			<CurrentCalendar bind:month={currentMonth} {calendars} {holidays}></CurrentCalendar>
 		</div>
 		<div class="info-bar">
-			<InfoBar month={currentMonth} {calendars} {holidays}></InfoBar>
+			<InfoBar month={currentMonth} bind:calendars {holidays}></InfoBar>
 		</div>
 	</div>
 </div>
@@ -44,40 +57,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	.hero-banner {
-		background-image: url('../lib/assets/hero_banner.jpg');
-		width: 100%;
-		height: max(40vh, 300px);
-		background-size: cover;
-		background-position: 50% 50%;
-		background-color: var(--color-base-9);
-		background-blend-mode: color-dodge;
-		user-select: none;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.mask {
-		background-image: url('../lib/assets/hero_banner.jpg');
-		width: 100%;
-		height: max(40vh, 300px);
-		background-size: cover;
-		background-position: 50% 50%;
-		background-color: var(--color-accent-9);
-		background-blend-mode: color-dodge;
-		filter: brightness(1.2);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: clamp(7rem, 24vw, 28rem);
-		text-wrap-mode: nowrap;
-		letter-spacing: clamp(-4rem, -2vw, -1rem);
-		font-weight: bold;
-		margin: 0;
-		padding: 0;
-	}
+
 	.calendar {
 		display: flex;
 		align-items: center;

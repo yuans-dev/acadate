@@ -8,7 +8,7 @@
 </script>
 
 <div class="day">
-	{#if starts.length !== 0 || ends.length !== 0}
+	{#if starts.length !== 0 || ends.length !== 0 || holidays.length !== 0}
 		<div class="start-indicators">
 			{#each starts as start}
 				{#if start.type == 'break'}
@@ -23,6 +23,8 @@
 					></i>
 				{/if}
 			{/each}
+			{#each holidays as holiday}
+				<i class="fa-solid fa-gift holiday"></i>{/each}
 		</div>
 	{/if}
 
@@ -51,7 +53,9 @@
 		cursor: pointer;
 		transition: all 0.3s ease;
 	}
-
+	.holiday {
+		color: var(--color-accent-5);
+	}
 	.day:hover {
 		background-color: var(--color-accent-5);
 		color: var(--color-light);
@@ -62,7 +66,8 @@
 		top: -1rem;
 		padding: 0.4rem;
 	}
-	.day:hover .start-indicator {
+	.day:hover .start-indicator,
+	.day:hover .holiday {
 		color: var(--color-light) !important;
 	}
 	.indicators {

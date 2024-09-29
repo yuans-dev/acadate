@@ -5,6 +5,7 @@
 	export let month = 0;
 	export let calendars = [];
 	export let holidays = [];
+	$: calendars = calendars.filter((calendar) => calendar.shown);
 	let year = 2024;
 	$: year = getYear(month);
 	function getMonthName(index) {
@@ -52,6 +53,7 @@
 					holidays
 				)}
 				starts={CalendarHelper.getStarts(new Date(year, month % 12, i + 1), calendars)}
+				holidays={CalendarHelper.getHolidaysForDay(new Date(year, month % 12, i + 1), holidays)}
 			></Day>
 		{/each}
 	</div>
@@ -125,9 +127,9 @@
 		}
 		.nav-button:hover {
 			background-color: transparent;
-	}
-	.nav-button:active {
-		background-color: var(--color-accent-2);
-	}
+		}
+		.nav-button:active {
+			background-color: var(--color-accent-2);
+		}
 	}
 </style>

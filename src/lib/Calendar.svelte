@@ -8,6 +8,8 @@
 	export let month = 0;
 	export let calendars = [];
 	export let holidays = [];
+
+	$: calendars = calendars.filter((calendar) => calendar.shown);
 	let year = 2024;
 	$: year = getYear(month);
 	function getMonthName(index) {
